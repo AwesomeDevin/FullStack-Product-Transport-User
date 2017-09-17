@@ -1,0 +1,147 @@
+<style type="text/css" scoped lang='less'>
+	div.body{
+		
+		height: 100%;
+		width:100%;
+		position: relative;
+		
+	}
+	.mask_layer{
+		
+		height: 100%;
+		width:100%;
+		background: black;
+		opacity: 0;
+		transition: all 1.5s;
+	}
+	.mask_layer.active{
+		opacity: 0.3;
+	}
+	.bar{
+		left: 0;
+		top: 0;
+		position: absolute;
+		background: white;
+		width: 85%;
+		height: 100%;
+		.user{
+			width: 100%;
+			height: 25%;
+			display: flex;
+			align-items:center;
+			background: coral;
+			.info{
+				width: 80%;
+				height: 65%;
+				margin:0 auto;
+				display: flex;
+				align-items:center;
+				justify-content:space-between;
+				img{
+
+					width: 0.54rem;
+					height: 0.54rem;
+					border-radius: 0.5rem;
+					box-shadow: 0 0 5px white;
+				}
+				div{
+					box-sizing: border-box;
+					
+					width: 1.5rem;
+					float: right;
+					p{
+						line-height: 0.25rem;
+						margin-left: 0.2rem;
+						font-size: 0.16rem;
+						font-family: fantasy;
+						color:white;
+					}
+				}
+			}
+		}
+		.menu{
+			width:100%;
+			height: 68%;
+			li{
+				width: 100%;
+				line-height: 0.44rem;
+				margin:0;
+				box-sizing: border-box;
+				padding:0 0.2rem ;
+				i.fa{
+					color:#353134;
+					padding: 0 0.15rem;
+					width: 0.25rem;
+				}
+			}
+		}
+		.footer{
+			width: 100%;
+			height:7%;
+			text-align: center;
+			box-shadow: 0 0px 10px #bcb8b8;
+			background: #eee;
+			i.fa{
+				color:#ff7f50;
+				padding: 0 0.05rem;
+			}
+		}
+	}
+</style>
+<template>
+<div class="body"  >
+	<div class="mask_layer" :class="showSideMenuFlag?'active':''" @click="clickBody()"></div>
+	<div class="bar">
+		<div class="user">
+			<div class="info">
+			<router-link to="/settings">
+				<img :src="userInfo.head_img"/>
+				<div>
+					<p>{{userInfo.tel}}</p>
+					<p>{{userInfo.userName}}</p>
+				</div>
+			</router-link>
+			</div>
+		</div>
+		<ul class="menu">
+			<li><i class="fa fa-file-text" aria-hidden="true"></i><span>订单记录</span></li>
+			<li><i class="fa fa-truck" aria-hidden="true"></i><span>我的司机</span></li>
+			<li><i class="fa fa-ticket" aria-hidden="true"></i><span>优惠券</span></li>
+			<li><i class="fa fa-phone-square" aria-hidden="true"></i><span>客服中心</span></li>
+			<li><i class="fa fa-handshake-o" aria-hidden="true"></i><span>邀请有奖</span></li>
+			
+		</ul>
+		<div class="footer">
+			<i class="fa fa-truck" aria-hidden="true"></i>
+			<span> 拉货就找托卡 Tohcart</span>
+		</div>
+	</div>
+	
+</div>
+</template>
+
+<script type="text/javascript">
+export default{
+	props:{
+		controlSideMenu:null,
+		showSideMenuFlag:null,
+	},
+	name:'sideMenu',
+	data(){
+		return{
+			userInfo:{},
+		}
+	},
+	methods:{
+		clickBody(){
+			this.controlSideMenu();
+		}
+	},
+	created(){
+		
+		this.userInfo.head_img = 'src/assets/logo.png';
+		this.userInfo.tel='13145950323';
+		this.userInfo.userName = 'Tohcart';
+	}
+}
+</script>
