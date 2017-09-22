@@ -37,6 +37,11 @@
 				display: flex;
 				align-items:center;
 				justify-content:space-between;
+				i.fa-user-circle{
+					font-size: 0.5rem;
+					display: inline-block;
+					color:white;
+				}
 				img{
 
 					width: 0.54rem;
@@ -94,11 +99,18 @@
 	<div class="bar">
 		<div class="user">
 			<div class="info">
-			<router-link to="/settings">
+			<router-link v-if="userInfo.tel" to="/settings">
 				<img :src="userInfo.head_img"/>
 				<div>
 					<p>{{userInfo.tel}}</p>
-					<p>{{userInfo.userName}}</p>
+					<p>{{userInfo.username}}</p>
+				</div>
+			</router-link>
+			<router-link v-if="!userInfo.tel" to="/login">
+				<i class="fa fa-user-circle" aria-hidden="true"></i>
+				<div>
+					<p>Login</p>
+					<p>点击登录</p>
 				</div>
 			</router-link>
 			</div>
@@ -121,15 +133,21 @@
 </template>
 
 <script type="text/javascript">
+import bus from '../module/bus';
+import Vue from 'vue';
+
 export default{
 	props:{
 		controlSideMenu:null,
 		showSideMenuFlag:null,
+		userInfo:null,
+	},
+	watch:{
 	},
 	name:'sideMenu',
 	data(){
 		return{
-			userInfo:{},
+			
 		}
 	},
 	methods:{
@@ -138,10 +156,17 @@ export default{
 		}
 	},
 	created(){
+		// bus.$on('getUserInfo',function(data){
+		// 	for(var key in data)
+		// 	{
+		// 		Vue.set(this.userInfo,key,data[key]);
+		// 	}
+		// 	console.log('sideMenu',this.userInfo);
+		// })
 		
-		this.userInfo.head_img = 'src/assets/logo.png';
-		this.userInfo.tel='13145950323';
-		this.userInfo.userName = 'Tohcart';
+		// this.userInfo.head_img = 'src/assets/logo.png';
+		// this.userInfo.tel='13145950323';
+		// this.userInfo.username = 'Tohcart';
 	}
 }
 </script>

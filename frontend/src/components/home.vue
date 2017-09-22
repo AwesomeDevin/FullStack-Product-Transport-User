@@ -384,14 +384,16 @@
 			<div class="action_box"><p><i class="fa fa-clock-o" aria-hidden="true"></i>预约</p><p><i class="fa fa-rocket" aria-hidden="true"></i>现在用车</p></div>
 		</footer>
 	</div>
-	<sidemenu  :showSideMenuFlag="showSideMenuFlag" :controlSideMenu="controlSideMenu" :class="showSideMenuFlag?'active':''" id="sidemenu"></sidemenu>
+	<sidemenu :userInfo="userInfo"  :showSideMenuFlag="showSideMenuFlag" :controlSideMenu="controlSideMenu" :class="showSideMenuFlag?'active':''" id="sidemenu"></sidemenu>
 </div>
 </template>
 
 
 <script type="text/javascript">
 import { addClass, removeClass } from 'mint-ui/src/utils/dom';
-import SideMenu from './sidemenu.vue'
+import SideMenu from './sidemenu.vue';
+import bus from '../module/bus';
+import g from '../module/global';
 	export default{
 		name:'Home',
 		data(){
@@ -409,6 +411,7 @@ import SideMenu from './sidemenu.vue'
 				'startSite':null,
 				'endSite':null,
 				'showSideMenuFlag':false,
+				'userInfo':g.userInfo,
 			}
 		},
 		watch:{
@@ -424,6 +427,7 @@ import SideMenu from './sidemenu.vue'
 			},
 			front(){ 
 				this.$refs.mtSwipe.prev();
+
 			},
 			back(){	
 				this.$refs.mtSwipe.next();
@@ -522,7 +526,6 @@ import SideMenu from './sidemenu.vue'
 			}
 		},
 		created(){
-			
 			
 		},
 		mounted () {
