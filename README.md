@@ -1,0 +1,3 @@
+# first-FullStack-Product
+一款vue+webpack+django+mongodb开发的货物运输型的app(用户版).
+# 开发中...
