@@ -322,6 +322,7 @@
 	}
 	
 	
+	
 </style>
 <template>
 <div style="height:100%;width:100%;overflow: hidden;" v-cloak>
@@ -400,6 +401,11 @@
 		</footer>
 	</div>
 	<sidemenu :userInfo="userInfo"  :showSideMenuFlag="showSideMenuFlag" :controlSideMenu="controlSideMenu" :class="showSideMenuFlag?'active':''" id="sidemenu"></sidemenu>
+	<mt-datetime-picker
+    ref="picker"
+    type="time"
+    v-model="pickerValue" @confirm="confirmDate">
+  </mt-datetime-picker>
 </div>
 </template>
 
@@ -429,6 +435,7 @@ import g from '../module/global';
 				'showSideMenuFlag':false,
 				'userInfo':g.userInfo,
 				'distance':0,
+				'pickerValue':null,
 			}
 		},
 		watch:{
@@ -438,6 +445,14 @@ import g from '../module/global';
 			}
 		},
 		methods:{
+			confirmDate(value){
+				console.log(new Date().toLocaleDateString(),value);
+				this.$store.commit('increment',{date:new Date().toLocaleDateString()+' '+value});
+				this.$router.push({name:'confirm'});
+			},
+			openPicker() {
+				this.$refs.picker.open();
+			},
 			appointOrder(){
 				if(!g.userInfo.username)
 				{
@@ -452,6 +467,7 @@ import g from '../module/global';
 						});
 					return;
 				}
+				this.openPicker();
 			},
 			makeOrder(){
 				if(!g.userInfo.username)

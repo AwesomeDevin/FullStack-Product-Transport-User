@@ -1,4 +1,7 @@
 <style type="text/css" scoped lang='less'>
+	a{
+		color:#353134;
+	}
 	div.body{
 		
 		height: 100%;
@@ -116,7 +119,7 @@
 			</div>
 		</div>
 		<ul class="menu">
-			<li><i class="fa fa-file-text" aria-hidden="true"></i><span>订单记录</span></li>
+			 <router-link to="/order"><li><i class="fa fa-file-text" aria-hidden="true"></i><span>订单记录</span></li></router-link>
 			<li><i class="fa fa-truck" aria-hidden="true"></i><span>我的司机</span></li>
 			<li><i class="fa fa-ticket" aria-hidden="true"></i><span>优惠券</span></li>
 			<li><i class="fa fa-phone-square" aria-hidden="true"></i><span>客服中心</span></li>

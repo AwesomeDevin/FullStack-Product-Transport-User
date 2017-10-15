@@ -8,12 +8,12 @@
         section{
 
             width: 100%;
-            height: 100%;
+            height: 5.28rem;
             box-sizing: border-box;
             // padding: 0 0.15rem;
             div.list{
                 background: white;
-                margin:0.25rem 0;
+                margin:0 0 0.25rem 0;
                 box-sizing: border-box;
                 border-top: 2px solid #ef5217;
                 ul{
@@ -61,9 +61,7 @@
             }
         }
     }
-    header.mint-header{
-            background: #3f3e3d;
-    }
+
     footer{
         width: 100%;
         height: 0.88rem;
@@ -122,24 +120,30 @@
             <p>订单联系人资料</p>
             <ul>
                 <li><i class="fa fa-calendar" aria-hidden="true"></i>{{date}}</li>
-                <li><i class="fa fa-user" aria-hidden="true"></i><input v-model="username" type="text"/></li>
-                <li><i class="fa fa-phone-square" aria-hidden="true"></i><input v-model="tel" type="text"/></li>
+                <li><i class="fa fa-user" aria-hidden="true"></i><input placeholder="请使用真实姓名" v-model="username" type="text"/></li>
+                <li><i class="fa fa-phone-square" aria-hidden="true"></i><input placeholder="请填写手机号" v-model="tel" type="text"/></li>
             </ul>
             </div>
             <footer>
                 <div class="price_box">
                     价格:  <span>￥23</span>
                 </div>
-                <button :disabled="!allowable">下一步</button>
+                <button @click="commit" :disabled="!allowable">下一步</button>
             </footer>
-            
+                
+                <mt-actionsheet
+                  :actions="actions"
+                  v-model="sheetVisible">
+                </mt-actionsheet>    
           
             
         </section>
+        
     </div>
 </template>
 <script type="text/javascript">
     import g from '../module/global';
+    import { Toast } from 'mint-ui';
     export default{
         name:'confirm',
         data(){
@@ -149,6 +153,14 @@
                 tel:null,
                 date:null,
                 username:null,
+                actions:[{
+                    name:'微信',
+                    method:this.selectVX,
+                },{
+                    name:'支付宝',
+                    method:this.selectZFB,
+                }],
+                sheetVisible:false,
             }
         },
         computed:{
@@ -161,7 +173,40 @@
             this.endSite = g.endSite;
             this.tel = g.userInfo.tel;
             this.username = g.userInfo.username;
-            this.date=new Date().toLocaleString('chinese',{hour12:false});
+            console.log(this.$store);
+            if(this.$store.state.expetDate)
+            {
+                 this.date = this.$store.state.expetDate;
+                 this.$store.commit('increment',{date:null});
+            }else {
+                this.date=new Date().toLocaleString('chinese',{hour12:false});
+            }
+            
         },
+        methods:{
+            selectVX(){
+                console.log('vx');
+                Toast({
+                          message: '微信支付开发中...',
+                          iconClass: 'fa fa-times',
+                          duration: 2000
+                        });
+                 this.sheetVisible = false;
+
+            },
+            selectZFB(){
+                console.log('zfb');
+                Toast({
+                          message: '支付宝支付开发中...',
+                          iconClass: 'fa fa-times',
+                          duration: 2000
+                        });
+                 this.sheetVisible = false;
+            },
+            commit(){
+               
+                this.sheetVisible = true;
+            },
+        }
     }
 </script>
