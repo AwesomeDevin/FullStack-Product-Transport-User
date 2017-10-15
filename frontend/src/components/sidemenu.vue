@@ -125,7 +125,7 @@
 		</ul>
 		<div class="footer">
 			<i class="fa fa-truck" aria-hidden="true"></i>
-			<span> 拉货就找托卡 Tohcart</span>
+			<span> 托运就上托卡 Tohcart</span>
 		</div>
 	</div>
 	

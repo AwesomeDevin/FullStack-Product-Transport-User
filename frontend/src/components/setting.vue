@@ -62,7 +62,7 @@
 				</div>
 			</a>
 			<mt-cell
-			  title="昵称"
+			  title="姓名"
 			  to="/settingsdetail"
 			  is-link
 			  :value="userInfo.username?userInfo.username:'去设置'">
@@ -88,6 +88,7 @@
 <script type="text/javascript">
 import g from '../module/global';
 import { Toast } from 'mint-ui';
+import { MessageBox } from 'mint-ui';
 import Vue from 'vue';
 
 	export default{
@@ -132,9 +133,16 @@ import Vue from 'vue';
 
 			},
 			chooseImg(e){
+				console.log(this.userInfo.tel);
 				if(!this.userInfo.tel)
 				{
 					this.$router.push('Login');
+					return;
+				}
+				console.log('>>>>',parseInt(e.target.files[0]).size/1024>300,e.target.files[0].size/1024);
+				if( parseInt(e.target.files[0].size)/1024>300)
+				{
+					MessageBox('错误', '请传入图片小于300kb的图片');
 					return;
 				}
 				this.files = e.target.files[0];

@@ -176,24 +176,23 @@
 				height: 100%;
 				display: flex;
 				flex-direction:column;
-				
+				border-right: 1px solid #edeaea;
+    			box-sizing: border-box;
 				align-items:center;
 				i{
-					width: 0.08rem;
-					height: 0.08rem;
-					border-radius: 50%;
 					
 				}
 				i:nth-child(1){
-					background: #43af33;
-					margin-top: 0.15rem;
+					color:#12b266;
+					margin-top: 0.1rem;
 				}	
 				i:nth-of-type(2){
-					background: #ef5217;
+					color:red;
+					
 				}
 				p{
 					width: 1px;
-					height: 0.4rem;
+					height: 0.3rem;
 					background: #ccc;
 					margin: 0.04rem 0;
 				}
@@ -207,6 +206,7 @@
 					height: 50%;
 					position: relative;
 					p{
+
 						line-height: 0.15rem;
 						box-sizing: border-box;
 						padding-top: 0.05rem;
@@ -226,6 +226,16 @@
 						height: 100%;
 						line-height: 0.35rem;
 						color:#888;
+						text-indent: 0.1rem;
+					}
+					.place{
+						width: 2.2rem;
+						overflow: hidden;
+						-ms-text-overflow: ellipsis;
+						white-space: nowrap;
+						height: 100%;
+						line-height: 0.35rem;
+						color:black;
 						text-indent: 0.1rem;
 					}
 				}
@@ -254,12 +264,13 @@
 			p{
 				line-height: 0.5rem;
 				text-align: center;
-				font-family: sans-serif;
+				font-family: "微软雅黑";
 				color:white;
 				span{
+					font-family: "微软雅黑";
 					font-size: 0.22rem;
 					color:#ef5217;
-					margin:0 0.2rem;
+					margin:0 0.1rem;
 				}
 			}
 		}
@@ -359,29 +370,33 @@
 			</div>
 			<div class="route">
 				<div class="icon_box">
-					<i></i>
+					<i class="fa fa-map-marker start"  aria-hidden="true"></i>
 					<p></p>
-					<i></i>
+					<i class="fa fa-map-marker end"  aria-hidden="true"></i>
 				</div>
 				<div class="route_box">
-					<div class="start_site">
-						<p v-if="!startSite" @click="selectStartSite()" class="placeholder">点击选择起点</p>
-						<p v-if="startSite">方圆E时光</p>
-						<p v-if="startSite">天河区科韵路12号</p>
+					<div class="start_site" @click="selectStartSite()">
+						<p v-if="!startSite"  class="placeholder">点击选择起点</p>
+						<p  v-if="startSite" class="place">{{startSite}}</p>
+
+						<!-- <p v-if="startSite">方圆E时光</p>
+						<p v-if="startSite">天河区科韵路12号</p> -->
 						<i v-if="startSite" class="fa fa-bullseye" aria-hidden="true"></i>
 					</div>
-					<div class="end_site">
-						<p v-if="!endSite" @click="selectEndSite()" class="placeholder">点击选择目的地</p>
-						<p v-if="endSite">中国光大银行(黄埔大道支行)</p>
-						<p v-if="endSite">黄埔大道中205</p>
+					<div class="end_site" @click="selectEndSite()">
+						<p v-if="!endSite"  class="placeholder">点击选择目的地</p>
+						<p v-if="endSite"  class="place">{{endSite}}</p>
+
+						<!-- <p v-if="endSite">中国光大银行(黄埔大道支行)</p>
+						<p v-if="endSite">黄埔大道中205</p> -->
 						<i @click="clearEndSite()" v-if="endSite" class="fa fa-times-circle-o" aria-hidden="true"></i>
 					</div>
 				</div>
 			</div>
 		</section>
 		<footer>
-			<div class="price_box"><p>价格 : <span>￥{{curCarConfig.price}}</span>  距离 : <span>3公里</span></p> </div>
-			<div class="action_box"><p><i class="fa fa-clock-o" aria-hidden="true"></i>预约</p><p><i class="fa fa-rocket" aria-hidden="true"></i>现在用车</p></div>
+			<div class="price_box"><p>价格 : <span>￥{{distance-10>0?parseInt(curCarConfig.price+curCarConfig.every*distance-10):curCarConfig.price}}</span>  距离 : <span>{{distance}}公里</span></p> </div>
+			<div class="action_box"><p @click="appointOrder"><i class="fa fa-clock-o" aria-hidden="true"></i>预约</p><p @click="makeOrder"><i class="fa fa-rocket" aria-hidden="true"></i>现在用车</p></div>
 		</footer>
 	</div>
 	<sidemenu :userInfo="userInfo"  :showSideMenuFlag="showSideMenuFlag" :controlSideMenu="controlSideMenu" :class="showSideMenuFlag?'active':''" id="sidemenu"></sidemenu>
@@ -391,6 +406,7 @@
 
 <script type="text/javascript">
 import { addClass, removeClass } from 'mint-ui/src/utils/dom';
+import { Toast } from 'mint-ui';
 import SideMenu from './sidemenu.vue';
 import bus from '../module/bus';
 import g from '../module/global';
@@ -399,11 +415,11 @@ import g from '../module/global';
 		data(){
 			return{
 				'carConfig':[
-					{'name':'小面包车','load':'500公斤','area':'1.8*1.3*1.2米','volume':'2.8立方','img_src':"src/assets/car1.jpg",'price':"30"},
-					{'name':'中面包车','load':'1吨','area':'2.7*1.4*1.2米','volume':'4.5立方','img_src':"src/assets/car2.jpg",'price':"55"},
-					{'name':'小型货车','load':'1吨','area':'2.7*1.5*1.5米','volume':'6立方','img_src':"src/assets/car3.jpg",'price':"65"},
-					{'name':'中型货车','load':'1.5吨','area':'4.2*1.8*1.8米','volume':'13.5立方','img_src':"src/assets/car4.jpg",'price':"100"},
-					{'name':'大型货车','load':'2吨','area':'5*2*2.2米','volume':'16立方','img_src':"src/assets/car5.jpg",'price':"150"},
+					{'name':'小面包车','load':'500公斤','area':'1.8*1.3*1.2米','volume':'2.8立方','img_src':"src/assets/car1.jpg",'price':30,'every':1.5},
+					{'name':'中面包车','load':'1吨','area':'2.7*1.4*1.2米','volume':'4.5立方','img_src':"src/assets/car2.jpg",'price':55,'every':2.5},
+					{'name':'小型货车','load':'1吨','area':'2.7*1.5*1.5米','volume':'6立方','img_src':"src/assets/car3.jpg",'price':65,'every':3.5},
+					{'name':'中型货车','load':'1.5吨','area':'4.2*1.8*1.8米','volume':'13.5立方','img_src':"src/assets/car4.jpg",'price':100,'every':4.5},
+					{'name':'大型货车','load':'2吨','area':'5*2*2.2米','volume':'16立方','img_src':"src/assets/car5.jpg",'price':150,'every':5.5},
 
 				],
 				'carIndex':0,
@@ -412,6 +428,7 @@ import g from '../module/global';
 				'endSite':null,
 				'showSideMenuFlag':false,
 				'userInfo':g.userInfo,
+				'distance':0,
 			}
 		},
 		watch:{
@@ -421,6 +438,37 @@ import g from '../module/global';
 			}
 		},
 		methods:{
+			appointOrder(){
+				if(!g.userInfo.username)
+				{
+					this.$router.push({name:'login'});
+					return;
+				}
+				if (!this.startSite||!this.endSite){
+					Toast({
+						  message: '请先选择路线',
+						  iconClass: 'fa fa-times',
+						  duration: 2000
+						});
+					return;
+				}
+			},
+			makeOrder(){
+				if(!g.userInfo.username)
+				{
+					this.$router.push({name:'login'});
+					return;
+				}
+				if (!this.startSite||!this.endSite){
+					Toast({
+						  message: '请先选择路线',
+						  iconClass: 'fa fa-times',
+						  duration: 2000
+						});
+					return;
+				}
+				this.$router.push({name:'confirm'});
+			},
 			controlSideMenu(){
 				this.showSideMenuFlag=this.showSideMenuFlag?false:true;
 				console.log(this.showSideMenuFlag);
@@ -511,13 +559,14 @@ import g from '../module/global';
 				}
 			},
 			selectStartSite(){
-				this.startSite = true;
+				this.$router.push('/map?site=start');
+				// this.startSite = true;
 			},
 			selectEndSite(){
-				this.endSite = true;
+				this.$router.push('/map?site=end');
 			},
 			clearEndSite(){
-				this.endSite = false;
+				this.endSite = null;
 			},
 		},
 		computed:{
@@ -529,8 +578,20 @@ import g from '../module/global';
 			
 		},
 		mounted () {
-			console.log(this.$refs.mtSwipe);
-			console.log(this.$refs.mtItem);
+			console.log(g);
+			if(g.startSite)
+			{
+				this.startSite = g.startSite;
+			}
+			if(g.endSite)
+			{
+				this.endSite = g.endSite;
+			}
+			if(g.distance)
+			{
+				this.distance = g.distance;
+			}
+			// console.log(this.$refs.mtItem);
 		    // console.log(this.$refs.carLi[0].getBoundingClientRect().width);
 		},
 		components:{

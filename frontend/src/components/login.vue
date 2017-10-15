@@ -13,6 +13,7 @@
 			text-align: center;
 			font-style: italic;
 			font-size:0.4rem;
+			font-family: fantasy;
 		}
 		section{
 			width: 100%;
@@ -66,7 +67,8 @@
 						}
 					}
 					button{
-						width: 37%;
+						float: right;
+						width: 35%;
 						height: 100%;
 						border:0;
 						margin-left: 0.05rem;
@@ -173,6 +175,14 @@ import bus from '../module/bus';
 						g.userInfo = res.body[0];
 						this.$router.push('Home');
 						bus.$emit('getUserInfo',g.userInfo);
+					}
+					else
+					{
+						Toast({
+						  message: '登录失败',
+						  iconClass: 'fa fa-times',
+						  duration: 2000
+						});
 					}
 				}, function(res){
 					Indicator.close();

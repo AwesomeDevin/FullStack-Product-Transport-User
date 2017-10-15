@@ -8,6 +8,10 @@
 			/*top:6rem;*/
 			
 		}
+		#toshow_img{
+			max-height: 5.68rem;
+			max-width: 3.2rem;
+		}
 
 		.showimg .btn-bar{
 			position: absolute;
@@ -155,8 +159,9 @@ import g from '../module/global';
 							  guides:false,
 							  aspectRatio: 1,  
       						  viewMode: 1, 
-      						  zoomable:false, 
+      						  // zoomable:false, 
       						  center:false,
+      						  scalable:true,
 							  // autoCropArea:0.7,
 							  crop: function(e) {
 							    console.log('screenShot5',e)

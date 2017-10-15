@@ -5,6 +5,10 @@ import Settings from './components/setting.vue'
 import SettingsDetail from './components/settingsDetail.vue'
 import Login from './components/login.vue'
 import ScreenShot from './components/screenshot.vue'
+import MapView from './components/map.vue'
+import Confirm from './components/confirm.vue'
+
+
 
 
 
@@ -62,11 +66,21 @@ const routes = [
 	},
 	{
 		path: '/login',
+		name:'login',
 		component: Login,
 	},
 	{
 		path: '/screenshot',
 		component: ScreenShot,
+	},
+	{
+		path: '/map',
+		component: MapView,
+	},
+	{
+		path: '/confirm',
+		name:'confirm',
+		component: Confirm,
 	},
 	{path:'*', redirect:'/home'}  //404
 ];
