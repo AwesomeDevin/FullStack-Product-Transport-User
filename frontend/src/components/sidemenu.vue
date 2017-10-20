@@ -103,7 +103,8 @@
 		<div class="user">
 			<div class="info">
 			<router-link v-if="userInfo.tel" to="/settings">
-				<img :src="userInfo.head_img"/>
+				<img v-if="userInfo.head_img" :src="userInfo.head_img"/>
+				<i v-if="!userInfo.head_img" class="fa fa-user-circle" aria-hidden="true"></i>
 				<div>
 					<p>{{userInfo.tel}}</p>
 					<p>{{userInfo.username}}</p>
@@ -124,6 +125,7 @@
 			<li><i class="fa fa-ticket" aria-hidden="true"></i><span>优惠券</span></li>
 			<li><i class="fa fa-phone-square" aria-hidden="true"></i><span>客服中心</span></li>
 			<li><i class="fa fa-handshake-o" aria-hidden="true"></i><span>邀请有奖</span></li>
+			<li @click="logout()"><i class="fa fa-sign-out" aria-hidden="true"></i><span>退出登录</span></li>
 			
 		</ul>
 		<div class="footer">
@@ -137,6 +139,7 @@
 
 <script type="text/javascript">
 import bus from '../module/bus';
+import g from '../module/global';
 import Vue from 'vue';
 
 export default{
@@ -156,6 +159,27 @@ export default{
 	methods:{
 		clickBody(){
 			this.controlSideMenu();
+		},
+		logout(){
+			console.log(this.userInfo.tel);
+			if (!this.userInfo.tel)
+			{
+				return;
+			}
+			this.$emit('logout',{
+				username:null,
+			  	tel:null,
+			  	head_img:null,
+			  	sex:null,
+			});
+			Vue.set(g,'userInfo',{
+				username:null,
+			  	tel:null,
+			  	head_img:null,
+			  	sex:null,
+			});
+			bus.$emit('getUserInfo',g.userInfo);
+			this.$forceUpdate();
 		}
 	},
 	created(){

@@ -2,11 +2,12 @@
   margin:0;
   padding: 0;
   font-size: 0.12rem;
-  font-family: fantasy;
+  font-family: '黑体';
 }
 body,html{
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 h1,h2,h3,h4,h5{
 	display: block;
@@ -63,4 +64,82 @@ body i.fa.fa-check{
 body i.fa.fa-times{
   font-size: 0.4rem !important;
   color:white;
+}
+.tangram-suggestion-main{
+    width: 80% !important;
+    left: 10% !important;
+    top: 0.46rem !important;
+}
+.anchorBL img{
+  display: none;
+}
+.cropper-view-box{
+  outline: none !important;
+  border-radius: 50%;
+  border:1px solid white;
+
+}
+.cropper-face{
+  background: transparent;
+}
+.mint-datetime-action{
+    color:#ef5217;
+  }
+.mint-navbar{
+        background: #3f3e3d;
+    }
+   .mint-tab-item-label{
+        color:white;
+    }
+.mint-navbar .mint-tab-item.is-selected{
+  border-bottom: 0px solid #ef5217;
+    color: #ef5217;
+}
+.mint-tab-item.is-selected{
+  position: relative;
+}
+.mint-tab-item.is-selected:after{
+  content: '';
+  display: block;
+  width: 100%;
+  height: 3px;
+  position: absolute;
+  background: #ef5217;
+  left: 0;
+  bottom:3px;
+}
+header.mint-header{
+            background: #3f3e3d;
+            height: 0.4rem;
+            h1{
+                font-size: 0.18rem !important;
+                margin: 0;
+            }
+    }
+.mint-tab-container-wrap{
+  overflow-y: auto;
+}
+.mint-navbar{
+  height: 0.46rem;
+  line-height: 0.46rem;
+}
+.mint-tab-item .mint-tab-item-label{
+  font-size: 0.14rem;
+
+}
+.mint-navbar .mint-tab-item{
+  padding: 0.17rem 0;
+}
+.mint-tab-container-wrap{
+  height:4.82rem;
+  overflow-y: auto;
+
+}
+.mint-tab-container-wrap::-webkit-scrollbar{
+  opacity: 0;
+  width: 1px;
+  background: white;
+}
+.cropper-face{
+  background-color: transparent;
 }

@@ -400,7 +400,7 @@
 			<div class="action_box"><p @click="appointOrder"><i class="fa fa-clock-o" aria-hidden="true"></i>预约</p><p @click="makeOrder"><i class="fa fa-rocket" aria-hidden="true"></i>现在用车</p></div>
 		</footer>
 	</div>
-	<sidemenu :userInfo="userInfo"  :showSideMenuFlag="showSideMenuFlag" :controlSideMenu="controlSideMenu" :class="showSideMenuFlag?'active':''" id="sidemenu"></sidemenu>
+	<sidemenu @logout="logout" :userInfo="userInfo"  :showSideMenuFlag="showSideMenuFlag" :controlSideMenu="controlSideMenu" :class="showSideMenuFlag?'active':''" id="sidemenu"></sidemenu>
 	<mt-datetime-picker
     ref="picker"
     type="time"
@@ -445,6 +445,14 @@ import g from '../module/global';
 			}
 		},
 		methods:{
+			logout(data){
+				this.userInfo = data;
+				Toast({
+					message: '退出登录',
+					iconClass: 'fa fa-check',
+					duration: 2000
+				});
+			},
 			confirmDate(value){
 				console.log(new Date().toLocaleDateString(),value);
 				this.$store.commit('increment',{date:new Date().toLocaleDateString()+' '+value});

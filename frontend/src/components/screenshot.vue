@@ -49,6 +49,10 @@
 			top: 50%;
 			transform: translateY(-50%);
 		}
+
+		.cropper-face{
+		  background-color: transparent;
+		}
 		// .showimg .cropper-container {
 		//     font-size: 0;
 		//     line-height: 0;
@@ -113,6 +117,7 @@ import g from '../module/global';
 						  iconClass: 'fa fa-check',
 						  duration: 2000
 						});
+						this.$router.push('/home');
 					}
 				}, function(res){
 					Toast({
