@@ -462,7 +462,7 @@ import g from '../module/global';
 				this.$refs.picker.open();
 			},
 			appointOrder(){
-				if(!g.userInfo.username)
+				if(!g.userInfo.tel)
 				{
 					this.$router.push({name:'login'});
 					return;
@@ -478,7 +478,7 @@ import g from '../module/global';
 				this.openPicker();
 			},
 			makeOrder(){
-				if(!g.userInfo.username)
+				if(!g.userInfo.tel)
 				{
 					this.$router.push({name:'login'});
 					return;

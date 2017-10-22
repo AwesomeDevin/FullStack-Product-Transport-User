@@ -144,6 +144,7 @@
 <script type="text/javascript">
     import g from '../module/global';
     import { Toast } from 'mint-ui';
+    import io from 'socket.io-client';
     export default{
         name:'confirm',
         data(){
@@ -161,11 +162,21 @@
                     method:this.selectZFB,
                 }],
                 sheetVisible:false,
+                socket:null,
             }
         },
         computed:{
             allowable(){
                 return this.startSite&&this.endSite&&this.tel&&this.date&&this.username?true:false;
+            },
+            form(){
+                return{
+                    startSite:this.startSite,
+                    endSite:this.endSite,
+                    tel:this.tel,
+                    data:this.data,
+                    username:this.username
+                }
             }
         },
         mounted(){
@@ -183,25 +194,38 @@
             }
             
         },
+        created(){
+            this.socket = io('http://localhost:3000');
+        },
         methods:{
             selectVX(){
                 console.log('vx');
                 Toast({
-                          message: '微信支付开发中...',
-                          iconClass: 'fa fa-times',
+                          // message: '微信支付开发中...',
+                          message: '已为您下单',
+                          // iconClass: 'fa fa-times',
+                          iconClass: 'fa fa-check',
                           duration: 2000
                         });
-                 this.sheetVisible = false;
-
+                this.sheetVisible = false;
+                this.socket.emit('client-newOrder',this.form);
+                this.$router.push('/home');
+                // this.socket.on('server-newOrder',(data)=>{
+                //     console.log(data);
+                // })
             },
             selectZFB(){
                 console.log('zfb');
                 Toast({
-                          message: '支付宝支付开发中...',
-                          iconClass: 'fa fa-times',
+                          // message: '支付宝支付开发中...',
+                          message: '已为您下单',
+                          // iconClass: 'fa fa-times',
+                          iconClass: 'fa fa-check',
                           duration: 2000
                         });
-                 this.sheetVisible = false;
+                this.sheetVisible = false;
+                this.socket.emit('client-newOrder',this.form);
+                this.$router.push('/home');
             },
             commit(){
                

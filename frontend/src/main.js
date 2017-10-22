@@ -60,7 +60,7 @@ import VueResource from 'vue-resource';
 Vue.use(VueRouter);
 Vue.use(VueResource);
 Vue.use(Mint);
-// Vue.use(Vonic);
+// Vue.use(socket);
 const routes = [
 	{
 		path: '/home',
