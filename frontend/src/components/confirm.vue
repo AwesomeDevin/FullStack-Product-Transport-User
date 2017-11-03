@@ -174,8 +174,9 @@
                     startSite:this.startSite,
                     endSite:this.endSite,
                     tel:this.tel,
-                    data:this.data,
-                    username:this.username
+                    date:this.date,
+                    username:this.username,
+                    duration:g.duration,
                 }
             }
         },
@@ -184,13 +185,15 @@
             this.endSite = g.endSite;
             this.tel = g.userInfo.tel;
             this.username = g.userInfo.username;
-            console.log(this.$store);
             if(this.$store.state.expetDate)
             {
+                console.log(111);
                  this.date = this.$store.state.expetDate;
                  this.$store.commit('increment',{date:null});
             }else {
-                this.date=new Date().toLocaleString('chinese',{hour12:false});
+               
+
+                this.date=new Date().getFullYear()+"/"+new Date().getMonth()+"/"+new Date().getDay()+" "+new Date().getHours()+":"+new Date().getMinutes();
             }
             
         },
@@ -208,6 +211,7 @@
                           duration: 2000
                         });
                 this.sheetVisible = false;
+                console.log('----------------',this.form)
                 this.socket.emit('client-newOrder',this.form);
                 this.$router.push('/home');
                 // this.socket.on('server-newOrder',(data)=>{
