@@ -7,7 +7,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import json
 userAPI=mongodb_api.userAPI()
-
+orderAPI = mongodb_api.orderAPI()
 @api_view(['POST'])
 def api_register_user(request):
 	response = User().find(request)
@@ -21,6 +21,19 @@ def api_register_user(request):
 def api_update_userinfo_user(request):
 	response = User().update(request)
 	return response
+
+
+@api_view(['POST'])
+def api_insert_order(request):
+	response = Order().insert(request)
+	return response
+
+@api_view(['GET'])
+def api_get_all_order(request):
+	response = Order().find_all(request)
+	return response
+
+
 
 
 class User(object):
@@ -59,4 +72,25 @@ class User(object):
 		userAPI.update_user_info(_id, username, tel, sex, head_img)
 		return HttpResponse('success')
 
+
+
+class Order(object):
+	def __init__(self):
+	    self.function_name = 'order'
+
+	def insert(self,request):
+		data = request.data.get('orderInfo')
+		orderAPI.add_order_info(data)
+		return HttpResponse('success')
+		
+
+	def find_all(self,request):
+		tel = request.GET.get('tel')
+		print tel
+		data = orderAPI.get_all_order_info(tel)
+		if not data or str(data)=='[]':
+			return None
+		for item in data:
+			item['_id'] = str(item['_id'])
+		return HttpResponse(json.dumps(data))
 

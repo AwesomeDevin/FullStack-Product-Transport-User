@@ -117,6 +117,7 @@ import g from '../module/global';
 						  iconClass: 'fa fa-check',
 						  duration: 2000
 						});
+						this.$router.goBack()
 						this.$router.push('/home');
 					}
 				}, function(res){
@@ -129,6 +130,7 @@ import g from '../module/global';
 
 			},
 			toBack(){
+				this.$router.goBack()
 				this.cropperObj.destroy();
 				this.cropperObj=null;
 				this.$router.push('Settings');

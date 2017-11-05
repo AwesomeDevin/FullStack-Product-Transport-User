@@ -396,7 +396,7 @@
 			</div>
 		</section>
 		<footer>
-			<div class="price_box"><p>价格 : <span>￥{{distance-10>0?parseInt(curCarConfig.price+curCarConfig.every*distance-10):curCarConfig.price}}</span>  距离 : <span>{{distance}}公里</span></p> </div>
+			<div class="price_box"><p>价格 : <span>￥{{curPrice}}</span>  距离 : <span>{{distance}}公里</span></p> </div>
 			<div class="action_box"><p @click="appointOrder"><i class="fa fa-clock-o" aria-hidden="true"></i>预约</p><p @click="makeOrder"><i class="fa fa-rocket" aria-hidden="true"></i>现在用车</p></div>
 		</footer>
 	</div>
@@ -421,11 +421,11 @@ import g from '../module/global';
 		data(){
 			return{
 				'carConfig':[
-					{'name':'小面包车','load':'500公斤','area':'1.8*1.3*1.2米','volume':'2.8立方','img_src':"src/assets/car1.jpg",'price':30,'every':1.5},
-					{'name':'中面包车','load':'1吨','area':'2.7*1.4*1.2米','volume':'4.5立方','img_src':"src/assets/car2.jpg",'price':55,'every':2.5},
-					{'name':'小型货车','load':'1吨','area':'2.7*1.5*1.5米','volume':'6立方','img_src':"src/assets/car3.jpg",'price':65,'every':3.5},
+					{'name':'小面包车','load':'500公斤','area':'1.8*1.3*1.2米','volume':'2.8立方','img_src':"src/assets/car1.jpg",'price':30,'every':2},
+					{'name':'中面包车','load':'1吨','area':'2.7*1.4*1.2米','volume':'4.5立方','img_src':"src/assets/car2.jpg",'price':55,'every':2.8},
+					{'name':'小型货车','load':'1吨','area':'2.7*1.5*1.5米','volume':'6立方','img_src':"src/assets/car3.jpg",'price':65,'every':3.6},
 					{'name':'中型货车','load':'1.5吨','area':'4.2*1.8*1.8米','volume':'13.5立方','img_src':"src/assets/car4.jpg",'price':100,'every':4.5},
-					{'name':'大型货车','load':'2吨','area':'5*2*2.2米','volume':'16立方','img_src':"src/assets/car5.jpg",'price':150,'every':5.5},
+					{'name':'大型货车','load':'2吨','area':'5*2*2.2米','volume':'16立方','img_src':"src/assets/car5.jpg",'price':150,'every':6},
 
 				],
 				'carIndex':0,
@@ -442,6 +442,14 @@ import g from '../module/global';
 			carIndex:function(value,oldvalue){
 				var width=(0.7*value+0.1).toFixed(2);
 				this.$refs.nav_border.style.transform="translateX("+width+"rem)";
+			},
+			curCarConfig:function(value,oldvalue){
+				console.log(value,oldvalue);
+				g.curCarConfig = value;
+			},
+			curPrice:function(value,oldValue)
+			{
+				g.curPrice = value;
 			}
 		},
 		methods:{
@@ -596,6 +604,9 @@ import g from '../module/global';
 		computed:{
 			curCarConfig(){
 				return this.carConfig[this.carIndex];
+			},
+			curPrice(){
+				return this.distance-10>0?parseInt(this.curCarConfig.price+this.curCarConfig.every*this.distance-10):this.curCarConfig.price;
 			}
 		},
 		created(){
@@ -615,12 +626,15 @@ import g from '../module/global';
 			{
 				this.distance = g.distance;
 			}
+			g.curCarConfig = this.curCarConfig;
+			g.curPrice = this.curPrice;
 			// console.log(this.$refs.mtItem);
 		    // console.log(this.$refs.carLi[0].getBoundingClientRect().width);
 		},
 		components:{
             'sidemenu':SideMenu
-        }
+        },
+
 
 		
 	}

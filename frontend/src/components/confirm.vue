@@ -114,6 +114,9 @@
             <ul>
                 <li><i data-v-2c2085c4="" aria-hidden="true" class="fa fa-map-marker start"></i>起点:{{startSite}}</li>
                 <li><i data-v-2c2085c4="" aria-hidden="true" class="fa fa-map-marker end"></i>目的地:{{endSite}}</li>
+                <li style="font-family:'微软雅黑'; "><i class="fa fa-money" aria-hidden="true"></i>价格: {{curPrice?curPrice:''}}￥</li>
+                <li style="font-family:'微软雅黑'; "><i class="fa fa-truck" aria-hidden="true"></i>车型: {{curCarConfig?curCarConfig.name:''}}</li>
+
             </ul>
             </div>
             <div class="list">
@@ -126,7 +129,7 @@
             </div>
             <footer>
                 <div class="price_box">
-                    价格:  <span>￥23</span>
+                    价格:  <span>￥{{curPrice}}</span>
                 </div>
                 <button @click="commit" :disabled="!allowable">下一步</button>
             </footer>
@@ -134,7 +137,7 @@
                 <mt-actionsheet
                   :actions="actions"
                   v-model="sheetVisible">
-                </mt-actionsheet>    
+                </mt-actionsheet>
           
             
         </section>
@@ -163,6 +166,9 @@
                 }],
                 sheetVisible:false,
                 socket:null,
+                curCarConfig:null,
+                curPrice:null,
+                head_img:null,
             }
         },
         computed:{
@@ -177,6 +183,11 @@
                     date:this.date,
                     username:this.username,
                     duration:g.duration,
+                    distance:g.distance,
+                    price:g.curPrice,
+                    carType:this.curCarConfig.name,
+                    head_img:this.head_img,
+
                 }
             }
         },
@@ -185,16 +196,22 @@
             this.endSite = g.endSite;
             this.tel = g.userInfo.tel;
             this.username = g.userInfo.username;
+            this.curCarConfig = g.curCarConfig;
+            this.curPrice = g.curPrice;
+            this.head_img = g.userInfo.head_img;
+
             if(this.$store.state.expetDate)
             {
-                console.log(111);
                  this.date = this.$store.state.expetDate;
                  this.$store.commit('increment',{date:null});
             }else {
-               
-
-                this.date=new Date().getFullYear()+"/"+new Date().getMonth()+"/"+new Date().getDay()+" "+new Date().getHours()+":"+new Date().getMinutes();
+                this.date=new Date().getFullYear()+"/"+(parseInt(new Date().getMonth())+1)+"/"+(parseInt(new Date().getDay())+1)+" "+new Date().getHours()+":"+new Date().getMinutes();
             }
+            if(!this.curCarConfig)
+            {
+                this.$router.push('home');
+            }
+            console.log(this.curCarConfig)
             
         },
         created(){
@@ -202,7 +219,19 @@
         },
         methods:{
             selectVX(){
-                console.log('vx');
+                this.toPostOrder(this.form,function(flag){
+                    if(!flag)
+                    {
+                         Toast({
+                          // message: '微信支付开发中...',
+                          message: '下单失败,请重试',
+                          // iconClass: 'fa fa-times',
+                          iconClass: 'fa fa-times',
+                          duration: 2000
+                        });
+                        return;
+                    }
+                })
                 Toast({
                           // message: '微信支付开发中...',
                           message: '已为您下单',
@@ -214,12 +243,22 @@
                 console.log('----------------',this.form)
                 this.socket.emit('client-newOrder',this.form);
                 this.$router.push('/home');
-                // this.socket.on('server-newOrder',(data)=>{
-                //     console.log(data);
-                // })
+
             },
             selectZFB(){
-                console.log('zfb');
+                this.toPostOrder(this.form,function(flag){
+                    if(!flag)
+                    {
+                         Toast({
+                          // message: '微信支付开发中...',
+                          message: '下单失败,请重试',
+                          // iconClass: 'fa fa-times',
+                          iconClass: 'fa fa-times',
+                          duration: 2000
+                        });
+                        return;
+                    }
+                })
                 Toast({
                           // message: '支付宝支付开发中...',
                           message: '已为您下单',
@@ -234,6 +273,24 @@
             commit(){
                
                 this.sheetVisible = true;
+            },
+            toPostOrder(data,fn){
+                data.status="appoint";
+                var obj = {
+                    orderInfo:data,
+                }
+                this.$http.post('http://localhost:9090/api/transport/user/insert_order/', obj).then(function(res){
+                    if(res.status==200)
+                    {
+                       fn(true);
+                    }
+                    else
+                    {
+                        fn(false);
+                    }
+                }, function(res){
+                   fn(false);
+                });
             },
         }
     }

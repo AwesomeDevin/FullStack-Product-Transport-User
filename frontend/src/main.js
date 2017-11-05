@@ -10,7 +10,7 @@ import ScreenShot from './components/screenshot.vue'
 import MapView from './components/map.vue'
 import Confirm from './components/confirm.vue'
 import Order from './components/order.vue'
-
+import PageTransition from './components/PageTransition.vue'
 
 
 
@@ -63,40 +63,46 @@ Vue.use(Mint);
 // Vue.use(socket);
 const routes = [
 	{
-		path: '/home',
-		component: Home,
+		path:'/user',
+		name: 'PageTransition',
+      	component: PageTransition,
+      	children:[{
+			path: '/home',
+			component: Home,
+		},
+		{
+			path: '/settings',
+			component: Settings,
+		},
+		{
+			path: '/settingsdetail',
+			component: SettingsDetail,
+		},
+		{
+			path: '/login',
+			name:'login',
+			component: Login,
+		},
+		{
+			path: '/screenshot',
+			component: ScreenShot,
+		},
+		{
+			path: '/map',
+			component: MapView,
+		},
+		{
+			path: '/confirm',
+			name:'confirm',
+			component: Confirm,
+		},
+		{
+			path: '/order',
+			name:'order',
+			component: Order,
+		},]
 	},
-	{
-		path: '/settings',
-		component: Settings,
-	},
-	{
-		path: '/settingsdetail',
-		component: SettingsDetail,
-	},
-	{
-		path: '/login',
-		name:'login',
-		component: Login,
-	},
-	{
-		path: '/screenshot',
-		component: ScreenShot,
-	},
-	{
-		path: '/map',
-		component: MapView,
-	},
-	{
-		path: '/confirm',
-		name:'confirm',
-		component: Confirm,
-	},
-	{
-		path: '/order',
-		name:'order',
-		component: Order,
-	},
+	
 	{path:'*', redirect:'/home'}  //404
 ];
 
@@ -104,6 +110,15 @@ const routes = [
 const router = new VueRouter({
 	routes,
 })
+
+VueRouter.prototype.goBack  = function () {
+  this.isBack = true
+  window.history.go(-1)
+}
+VueRouter.prototype.go  = function () {
+  this.isBack = true
+  window.history.go(-1)
+}
 
 new Vue({
 	router,

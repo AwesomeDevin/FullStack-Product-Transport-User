@@ -229,6 +229,7 @@ export default{
 			{
 				g.endSite = this.selectAddress;
 			}
+			this.$router.goBack()
 			this.$router.push('/home');
 
 		}

@@ -10,7 +10,8 @@
                 height: 0.4rem;
             }
         section{
-
+            display: flex;
+            flex-direction:column;
             width: 100%;
             height: 5.28rem;
             box-sizing: border-box;
@@ -32,7 +33,100 @@
             text-align: center;
         }
     }
+    .item.doing .border{
+            width: 0.05rem;
+            height: 100%;
+            background:#2980b9;
+            filter:blur(1px);
+    }
+    .item.done .border{
+            width: 0.05rem;
+            height: 100%;
+            background:#16a085;
+            filter:blur(1px);
+    }
+    .item.cancel .border{
+            width: 0.05rem;
+            height: 100%;
+            background:#c0392b;
+            filter:blur(1px);
+    }
+    .item{
+        margin:0.1rem 0;
+        width: 100%;
+        height: 1rem;
+        background: white;
+        box-sizing: border-box;
+        box-shadow: 0 2px 3px 1px #b2aaaa;
+        border-radius: 0.25em;
+        padding: 0.08rem;
+        display: flex;
+        .border,.content{
+            float: left;
+        }
+        .content{
+            width: 100%;
+        }
+        
+        .content .top{
+            width: 100%;
+            height: 0.55rem;
+            padding-left: 0.05rem;
+            p:nth-of-type(1) i.fa{
+                color:#12b266;
+                font-size: 0.13rem;
+                margin-right: 0.05rem;
+            }
+            p:nth-of-type(2) i.fa{
+                color:red;
+                font-size: 0.13rem;
+                margin-right: 0.05rem;
+            }
+            p:nth-of-type(3){
+                color:#ccc;
+                font-size: 0.14rem;
+                margin-right: 0.05rem;
+                span:nth-of-type(2){
+                    margin-left: 0.15rem;
+                }
+            }
+            p:nth-of-type(3) i.fa{
+                color:#ccc;
+                font-size: 0.13rem;
+                margin-right: 0.05rem;
 
+            }
+            p{
+                width: 100%;
+                white-space: nowrap;
+                text-overflow:ellipsis;
+                overflow: hidden;
+                line-height: 0.18rem;
+                font-size: 0.13rem;
+            }
+        }
+        .content .bottom{
+            width: 100%;
+            height: 0.29rem;
+            background: #eaeaea;
+            color:black;
+            p{
+                line-height: 0.29rem;
+                text-indent: 0.05rem;
+                span:nth-of-type(2){
+                    margin-left: 0.15rem;
+                }
+            }
+        }
+
+    }
+    .item_list{
+        width: 100%;
+        height: 100%;
+        flex:1;
+        box-sizing: border-box;
+        padding: 0 0.1rem;
+    }
 </style>
 <template>
     <div id="order">
@@ -51,20 +145,68 @@
             <mt-tab-container v-model="selected">
               <mt-tab-container-item id="1">
                 <!-- <mt-cell v-for="n in 20" :title="'content ' + n" /> -->
-                <div class="order-none">
+                <div v-if="orderListDoing.length>0" class="item_list">
+                    <div v-for="item in orderListDoing" class="item doing">
+                        <div class="border"></div>
+                        <div class="content">
+                            <div class="top">
+                                <p><i class="fa fa-map-marker" aria-hidden="true"></i>{{item.startSite}}</p>
+                                <p><i class="fa fa-map-marker" aria-hidden="true"></i>{{item.endSite}}</p>
+                                <p><span><i class="fa fa-clock-o" aria-hidden="true"></i>{{item.date}}</span><span>距离:{{item.distance}}Km</span></p>
+                            </div>
+                            <div class="bottom">
+                                <p><span>接单人:{{item.accept_user?item.accept_user:'未接受'}}</span><span>手机号:{{item.accept_tel?item.accept_tel:'未接受'}}</span><b style="font-family:'微软雅黑';float:right;font-size:0.18rem;color:rgb(250, 103, 6); ">{{item.price}}￥</b></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="!orderListDoing.length>0" class="order-none">
                     <i class="fa fa-file-text-o order-none" aria-hidden="true"></i>
+                    
                     <p>没有订单哦 !</p>
                 </div>
               </mt-tab-container-item>
               <mt-tab-container-item id="2">
-               <div class="order-none">
+                <div v-if="orderListDone.length>0" class="item_list">
+                    <div v-for="item in orderListDone" class="item done">
+                        <div class="border"></div>
+                        <div class="content">
+                            <div class="top">
+                                <p><i class="fa fa-map-marker" aria-hidden="true"></i>{{item.startSite}}</p>
+                                <p><i class="fa fa-map-marker" aria-hidden="true"></i>{{item.endSite}}</p>
+                                <p><span><i class="fa fa-clock-o" aria-hidden="true"></i>{{item.date}}</span><span>距离:{{item.distance}}Km</span></p>
+                            </div>
+                            <div class="bottom">
+                                <p><span>接单人:{{item.accept_user?item.accept_user:'未接受'}}</span><span>手机号:{{item.accept_tel?item.accept_tel:'未接受'}}</span><b style="font-family:'微软雅黑';float:right;font-size:0.18rem;color:rgb(250, 103, 6); ">{{item.price}}￥</b></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="!orderListDone.length>0" class="order-none">
                     <i class="fa fa-file-text-o order-none" aria-hidden="true"></i>
+                    
                     <p>没有订单哦 !</p>
                 </div>
               </mt-tab-container-item>
               <mt-tab-container-item id="3">
-                <div class="order-none">
+                <div v-if="orderListCancel.length>0" class="item_list">
+                    <div v-for="item in orderListCancel" class="item cancel">
+                        <div class="border"></div>
+                        <div class="content">
+                            <div class="top">
+                                <p><i class="fa fa-map-marker" aria-hidden="true"></i>{{item.startSite}}</p>
+                                <p><i class="fa fa-map-marker" aria-hidden="true"></i>{{item.endSite}}</p>
+                                <p><span><i class="fa fa-clock-o" aria-hidden="true"></i>{{item.date}}</span><span>距离:{{item.distance}}Km</span></p>
+                            </div>
+                            <div class="bottom">
+                                <p><span>接单人:{{item.accept_user?item.accept_user:'未接受'}}</span><span>手机号:{{item.accept_tel?item.accept_tel:'未接受'}}</span><b style="font-family:'微软雅黑';float:right;font-size:0.18rem;color:rgb(250, 103, 6); ">{{item.price}}￥</b></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="!orderListCancel.length>0" class="order-none">
                     <i class="fa fa-file-text-o order-none" aria-hidden="true"></i>
+                    
                     <p>没有订单哦 !</p>
                 </div>
               </mt-tab-container-item>
@@ -74,15 +216,70 @@
 </template>
 <script type="text/javascript">
     import g from '../module/global';
+
     export default{
         name:'order',
         data(){
             return{
                 selected:'1',
+                userInfo:null,
+                orderList:[],
+
+            }
+        },
+        computed:{
+            orderListDoing(){
+                var arr=[];
+                this.orderList.forEach((data)=>{
+                    console.log(data);
+                   if (data.status=='doing'||data.status=='appoint')
+                   {
+                    arr.push(data);
+                   }
+                })
+                return arr;
+            },
+            orderListDone(){
+                var arr=[];
+                this.orderList.forEach((data)=>{
+                    console.log(data);
+                   if (data.status=='done')
+                   {
+                    arr.push(data);
+                   }
+                })
+                return arr;
+            },
+            orderListCancel(){
+                var arr=[];
+                this.orderList.forEach((data)=>{
+                    console.log(data);
+                   if (data.status=='cancel')
+                   {
+                    arr.push(data);
+                   }
+                })
+                return arr;
             }
         },
         created(){
-           
+            this.userInfo = g.userInfo;
+            console.log(this.userInfo);
+            if(!this.userInfo.tel)
+            {
+                this.$router.push({name:'login'});
+            }
+            this.initOrderAll();
         },
+        methods:{
+            initOrderAll(){
+                this.$http.get('http://localhost:9090/api/transport/user/get_all_order/?tel='+this.userInfo.tel).then(function(res){
+                    console.log(res.data);
+                    this.orderList = res.data;
+                },function(res){
+                    console.log(res.status);
+                });
+            }
+        }
     }
 </script>
