@@ -148,6 +148,7 @@
     import g from '../module/global';
     import { Toast } from 'mint-ui';
     import io from 'socket.io-client';
+    import { Indicator } from 'mint-ui';
     export default{
         name:'confirm',
         data(){
@@ -219,7 +220,10 @@
         },
         methods:{
             selectVX(){
+                Indicator.open('下单中');
+                var self = this;
                 this.toPostOrder(this.form,function(flag){
+                    Indicator.close();
                     if(!flag)
                     {
                          Toast({
@@ -231,22 +235,30 @@
                         });
                         return;
                     }
+                    else
+                    {
+                        Toast({
+                          // message: '支付宝支付开发中...',
+                              message: '已为您下单',
+                              // iconClass: 'fa fa-times',
+                              iconClass: 'fa fa-check',
+                              duration: 2000
+                            });
+                    self.sheetVisible = false;
+
+                    self.form._id = flag;
+                    console.log('form',self.form)
+                    self.socket.emit('client-newOrder',self.form);
+                    self.$router.push('/home');
+                    }
                 })
-                Toast({
-                          // message: '微信支付开发中...',
-                          message: '已为您下单',
-                          // iconClass: 'fa fa-times',
-                          iconClass: 'fa fa-check',
-                          duration: 2000
-                        });
-                this.sheetVisible = false;
-                console.log('----------------',this.form)
-                this.socket.emit('client-newOrder',this.form);
-                this.$router.push('/home');
 
             },
             selectZFB(){
+                Indicator.open('下单中');
+                var self = this;
                 this.toPostOrder(this.form,function(flag){
+                    Indicator.close();
                     if(!flag)
                     {
                          Toast({
@@ -258,17 +270,24 @@
                         });
                         return;
                     }
-                })
-                Toast({
+                    else
+                    {
+                        Toast({
                           // message: '支付宝支付开发中...',
-                          message: '已为您下单',
-                          // iconClass: 'fa fa-times',
-                          iconClass: 'fa fa-check',
-                          duration: 2000
-                        });
-                this.sheetVisible = false;
-                this.socket.emit('client-newOrder',this.form);
-                this.$router.push('/home');
+                              message: '已为您下单',
+                              // iconClass: 'fa fa-times',
+                              iconClass: 'fa fa-check',
+                              duration: 2000
+                            });
+                    self.sheetVisible = false;
+
+                    self.form._id = flag;
+                    console.log('form',self.form)
+                    self.socket.emit('client-newOrder',self.form);
+                    self.$router.push('/home');
+                    }
+                })
+                
             },
             commit(){
                
@@ -282,7 +301,7 @@
                 this.$http.post('http://localhost:9090/api/transport/user/insert_order/', obj).then(function(res){
                     if(res.status==200)
                     {
-                       fn(true);
+                       fn(res.data);
                     }
                     else
                     {

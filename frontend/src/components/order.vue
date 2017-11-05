@@ -114,7 +114,7 @@
                 line-height: 0.29rem;
                 text-indent: 0.05rem;
                 span:nth-of-type(2){
-                    margin-left: 0.15rem;
+                    margin-left: 0.1rem;
                 }
             }
         }
@@ -155,12 +155,12 @@
                                 <p><span><i class="fa fa-clock-o" aria-hidden="true"></i>{{item.date}}</span><span>距离:{{item.distance}}Km</span></p>
                             </div>
                             <div class="bottom">
-                                <p><span>接单人:{{item.accept_user?item.accept_user:'未接受'}}</span><span>手机号:{{item.accept_tel?item.accept_tel:'未接受'}}</span><b style="font-family:'微软雅黑';float:right;font-size:0.18rem;color:rgb(250, 103, 6); ">{{item.price}}￥</b></p>
+                                <p><span>接单人:{{item.accept_user?item.accept_user:'未接受'}}</span><span>手机号:{{item.accept_tel?item.accept_tel:'未接受'}}</span><b style="font-family:'微软雅黑';float:right;font-size:0.13rem;color:rgb(250, 103, 6); ">{{item.price}}￥</b></p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div v-if="!orderListDoing.length>0" class="order-none">
+                <div v-if="!orderListDoing.length>0&&!orderLoading" class="order-none">
                     <i class="fa fa-file-text-o order-none" aria-hidden="true"></i>
                     
                     <p>没有订单哦 !</p>
@@ -177,12 +177,12 @@
                                 <p><span><i class="fa fa-clock-o" aria-hidden="true"></i>{{item.date}}</span><span>距离:{{item.distance}}Km</span></p>
                             </div>
                             <div class="bottom">
-                                <p><span>接单人:{{item.accept_user?item.accept_user:'未接受'}}</span><span>手机号:{{item.accept_tel?item.accept_tel:'未接受'}}</span><b style="font-family:'微软雅黑';float:right;font-size:0.18rem;color:rgb(250, 103, 6); ">{{item.price}}￥</b></p>
+                                <p><span>接单人:{{item.accept_user?item.accept_user:'未接受'}}</span><span>手机号:{{item.accept_tel?item.accept_tel:'未接受'}}</span><b style="font-family:'微软雅黑';float:right;font-size:0.13rem;color:rgb(250, 103, 6); ">{{item.price}}￥</b></p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div v-if="!orderListDone.length>0" class="order-none">
+                <div v-if="!orderListDone.length>0&&!orderLoading" class="order-none">
                     <i class="fa fa-file-text-o order-none" aria-hidden="true"></i>
                     
                     <p>没有订单哦 !</p>
@@ -199,12 +199,12 @@
                                 <p><span><i class="fa fa-clock-o" aria-hidden="true"></i>{{item.date}}</span><span>距离:{{item.distance}}Km</span></p>
                             </div>
                             <div class="bottom">
-                                <p><span>接单人:{{item.accept_user?item.accept_user:'未接受'}}</span><span>手机号:{{item.accept_tel?item.accept_tel:'未接受'}}</span><b style="font-family:'微软雅黑';float:right;font-size:0.18rem;color:rgb(250, 103, 6); ">{{item.price}}￥</b></p>
+                                <p><span>接单人:{{item.accept_user?item.accept_user:'未接受'}}</span><span>手机号:{{item.accept_tel?item.accept_tel:'未接受'}}</span><b style="font-family:'微软雅黑';float:right;font-size:0.13rem;color:rgb(250, 103, 6); ">{{item.price}}￥</b></p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div v-if="!orderListCancel.length>0" class="order-none">
+                <div v-if="!orderListCancel.length>0&&!orderLoading" class="order-none">
                     <i class="fa fa-file-text-o order-none" aria-hidden="true"></i>
                     
                     <p>没有订单哦 !</p>
@@ -216,7 +216,7 @@
 </template>
 <script type="text/javascript">
     import g from '../module/global';
-
+    import { Indicator } from 'mint-ui';
     export default{
         name:'order',
         data(){
@@ -224,7 +224,7 @@
                 selected:'1',
                 userInfo:null,
                 orderList:[],
-
+                orderLoading:true,
             }
         },
         computed:{
@@ -273,11 +273,16 @@
         },
         methods:{
             initOrderAll(){
+                var self = this;
+                Indicator.open('加载中');
                 this.$http.get('http://localhost:9090/api/transport/user/get_all_order/?tel='+this.userInfo.tel).then(function(res){
                     console.log(res.data);
                     this.orderList = res.data;
+                    self.orderLoading = false;
+                    Indicator.close();
                 },function(res){
                     console.log(res.status);
+                    Indicator.close();
                 });
             }
         }

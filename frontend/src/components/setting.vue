@@ -55,7 +55,7 @@
 						
 							<i v-if="!userInfo.head_img"  class="fa fa-user-circle" aria-hidden="true"></i>
 							<img v-if="userInfo.head_img"  class="heaer_img" :src="userInfo.head_img">
-							<input type="file"  @change="chooseImg" name="img" />
+							<input type="file" accept="image/png,image/jpg, image/jpeg"  @change="chooseImg" name="img" />
 						
 					</div>
 					<i class="mint-cell-allow-right"></i>

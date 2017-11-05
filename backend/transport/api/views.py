@@ -80,8 +80,8 @@ class Order(object):
 
 	def insert(self,request):
 		data = request.data.get('orderInfo')
-		orderAPI.add_order_info(data)
-		return HttpResponse('success')
+		r = orderAPI.add_order_info(data)
+		return HttpResponse(r)
 		
 
 	def find_all(self,request):

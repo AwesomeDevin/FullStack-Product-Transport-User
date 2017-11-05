@@ -75,9 +75,11 @@ class orderAPI(MongoAPI):
         self.table_name = 'transport_user_order'
         self.table = self.get_table(self.table_name)
 
+
     def add_order_info(self,info):
         print 'info',info
-        self.table.insert(info)
+        r = self.table.insert(info)
+        return r
 
     def update_order_info(self,_id,username,tel,sex,head_img):
         update_time = datetime.datetime.now()
