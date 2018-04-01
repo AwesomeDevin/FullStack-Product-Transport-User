@@ -45,7 +45,7 @@ Vue.component(Navbar.name, Navbar);
 Vue.component(TabItem.name, TabItem);
 require('../css/style.less');
 require('../css/animate.css');
-require('font-awesome/css/font-awesome.css');
+require('../font-awesome/css/font-awesome.css');
 // require('cropperjs');
 require('../node_modules/cropperjs/dist/cropper.min.css');
 
