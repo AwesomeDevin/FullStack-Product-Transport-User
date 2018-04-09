@@ -13,21 +13,37 @@
         transitionName: 'slide-left'
       }
     },
-    beforeRouteUpdate (to, from, next) {
-        console.log(this.$route.path,'/home');
+    // beforeRouteUpdate (to, from, next) {
+    //   console.log(to,from)
+    //     if(this.$route.path!='/home')
+    //     {
+    //         this.$router.isBack=true;
+    //     }
+    //   let isBack = this.$router.isBack
+    //   if (isBack) {
+    //     this.transitionName = 'slide-right'
+    //   } else {
+    //     this.transitionName = 'slide-left'
+    //   }
+    //   this.$router.isBack = false
+    //   next()
+    // }
+    watch:{
+      '$route'(to,from){
+        const toDepth = to.path.split('/').length
+        const fromDepth = from.path.split('/').length
         if(this.$route.path!='/home')
         {
-            console.log('111');
             this.$router.isBack=true;
         }
-      let isBack = this.$router.isBack
-      if (isBack) {
-        this.transitionName = 'slide-right'
-      } else {
-        this.transitionName = 'slide-left'
-      }
-      this.$router.isBack = false
-      next()
+        let isBack = this.$router.isBack
+        if (isBack) {
+          this.transitionName = 'slide-right'
+        } else {
+          this.transitionName = 'slide-left'
+        }
+        this.$router.isBack = false
+        }
     }
   }
 </script>
